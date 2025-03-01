@@ -1,48 +1,48 @@
 @echo off
 chcp 65001 > nul
-title Cài đặt TSToolkit Update Checker
+title TSToolkit Update Checker Setup
 color 0A
 
 echo ===================================================
-echo      Cài đặt TSToolkit Update Checker
+echo      TSToolkit Update Checker Setup
 echo ===================================================
 echo.
-echo Công cụ này sẽ giúp bạn thiết lập tính năng tự động
-echo kiểm tra cập nhật mỗi khi mở Command Prompt (CMD).
+echo This tool will help you set up the automatic
+echo update check feature every time Command Prompt (CMD) is opened.
 echo.
-echo Lựa chọn:
-echo [1] Bật tính năng kiểm tra cập nhật
-echo [2] Tắt tính năng kiểm tra cập nhật
-echo [3] Kiểm tra cập nhật ngay
-echo [4] Thoát
+echo Options:
+echo [1] Enable update check feature
+echo [2] Disable update check feature
+echo [3] Check for updates now
+echo [4] Exit
 echo.
 
 :MENU
-set /p choice="Nhập lựa chọn của bạn (1-4): "
+set /p choice="Enter your choice (1-4): "
 
 if "%choice%"=="1" goto ENABLE
 if "%choice%"=="2" goto DISABLE
 if "%choice%"=="3" goto CHECK
 if "%choice%"=="4" goto EXIT
 
-echo Lựa chọn không hợp lệ. Vui lòng thử lại.
+echo Invalid choice. Please try again.
 goto MENU
 
 :ENABLE
 echo.
-echo Đang bật tính năng kiểm tra cập nhật...
+echo Enabling update check feature...
 regedit /s "%~dp0enable_update_check.reg"
-echo Đã bật tính năng kiểm tra cập nhật thành công!
-echo Mỗi khi mở CMD, hệ thống sẽ tự động kiểm tra cập nhật.
+echo Update check feature enabled successfully!
+echo Every time CMD is opened, the system will automatically check for updates.
 echo.
 pause
 goto EXIT
 
 :DISABLE
 echo.
-echo Đang tắt tính năng kiểm tra cập nhật...
+echo Disabling update check feature...
 regedit /s "%~dp0disable_update_check.reg"
-echo Đã tắt tính năng kiểm tra cập nhật thành công!
+echo Update check feature disabled successfully!
 echo.
 pause
 goto EXIT
@@ -56,5 +56,5 @@ goto EXIT
 
 :EXIT
 echo.
-echo Cảm ơn bạn đã sử dụng TSToolkit!
+echo Thank you for using TSToolkit!
 timeout /t 3 > nul 

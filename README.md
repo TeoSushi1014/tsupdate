@@ -1,150 +1,150 @@
 # TSToolkit Update Checker
 
-Công cụ này giúp tự động kiểm tra cập nhật cho TSToolkit mỗi khi mở Command Prompt (CMD).
+This tool automatically checks for updates to TSToolkit every time Command Prompt (CMD) is opened.
 
-## Cách hoạt động
+## How It Works
 
-Hệ thống kiểm tra cập nhật hoạt động theo các bước sau:
+The update checking system works through the following steps:
 
-1. **Thiết lập AutoRun**: Khi bạn cài đặt tính năng này, hệ thống sẽ thiết lập một giá trị Registry hoặc biến môi trường để Windows tự động chạy script `CheckUpdate.cmd` mỗi khi mở CMD.
+1. **AutoRun Setup**: When you install this feature, the system sets up a Registry value or environment variable to make Windows automatically run the `CheckUpdate.cmd` script every time CMD is opened.
 
-2. **Quy trình kiểm tra cập nhật**:
-   - Khi mở CMD, Windows sẽ tự động chạy script `CheckUpdate.cmd`
-   - Script này sẽ gọi PowerShell với quyền thực thi để chạy `UpdateChecker.ps1`
-   - `UpdateChecker.ps1` sẽ kiểm tra phiên bản hiện tại và so sánh với phiên bản mới nhất từ server
-   - Nếu có phiên bản mới, script sẽ hiển thị thông báo và hỏi người dùng có muốn cập nhật không
+2. **Update Check Process**:
+   - When CMD is opened, Windows automatically runs the `CheckUpdate.cmd` script
+   - This script calls PowerShell with execution privileges to run `UpdateChecker.ps1`
+   - `UpdateChecker.ps1` checks the current version and compares it with the latest version from the server
+   - If a new version is available, the script displays a notification and asks the user if they want to update
 
-3. **Cơ chế cập nhật**:
-   - Script sẽ so sánh phiên bản hiện tại (`$currentVersion`) với phiên bản mới nhất từ server
-   - Nếu phiên bản mới hơn, script sẽ hiển thị thông tin về bản cập nhật và đường dẫn tải về
-   - Người dùng có thể chọn tải về và cập nhật ngay hoặc bỏ qua
+3. **Update Mechanism**:
+   - The script compares the current version (`$currentVersion`) with the latest version from the server
+   - If a newer version is available, the script displays information about the update and the download link
+   - The user can choose to download and update immediately or skip
 
-4. **Tùy chọn bỏ qua kiểm tra**:
-   - Nếu không muốn kiểm tra cập nhật trong một phiên CMD cụ thể, bạn có thể sử dụng lệnh `cmd /D` để mở CMD mà không chạy AutoRun
+4. **Skip Check Option**:
+   - If you don't want to check for updates in a specific CMD session, you can use the `cmd /D` command to open CMD without running AutoRun
 
-## Thiết lập Server Cập Nhật
+## Setting Up the Update Server
 
-Để hệ thống kiểm tra cập nhật hoạt động đầy đủ, bạn cần thiết lập một server cập nhật. Dưới đây là các phương pháp thiết lập server:
+For the update checking system to work fully, you need to set up an update server. Here are methods for setting up the server:
 
-### Server Cập Nhật Chính Thức
+### Official Update Server
 
-TSToolkit sử dụng repository GitHub [TeoSushi1014/tsupdate](https://github.com/TeoSushi1014/tsupdate) làm server cập nhật chính thức. Repository này đã được thiết lập sẵn và bạn có thể sử dụng ngay:
+TSToolkit uses the GitHub repository [TeoSushi1014/tsupdate](https://github.com/TeoSushi1014/tsupdate) as the official update server. This repository is already set up and you can use it right away:
 
-1. URL cập nhật chính thức: `https://teosushi1014.github.io/tsupdate/updates.json`
-2. Thư mục tải về: `https://teosushi1014.github.io/tsupdate/dl/`
+1. Official update URL: `https://teosushi1014.github.io/tsupdate/updates.json`
+2. Download directory: `https://teosushi1014.github.io/tsupdate/dl/`
 
-Để sử dụng server cập nhật chính thức, hãy cập nhật biến `$updateServerUrl` trong `UpdateChecker.ps1`:
+To use the official update server, update the `$updateServerUrl` variable in `UpdateChecker.ps1`:
 
 ```powershell
 $updateServerUrl = "https://teosushi1014.github.io/tsupdate/updates.json"
 ```
 
-Cấu trúc repository:
-- `/updates.json`: File chứa thông tin cập nhật mới nhất
-- `/dl/`: Thư mục chứa các file cập nhật để tải về
-- `/index.html`: Trang web đơn giản hiển thị thông tin cập nhật
+Repository structure:
+- `/updates.json`: File containing the latest update information
+- `/dl/`: Directory containing update files for download
+- `/index.html`: Simple webpage displaying update information
 
-### Các Phương Pháp Thiết Lập Server Khác
+### Other Server Setup Methods
 
-Nếu bạn muốn tự thiết lập server cập nhật riêng, bạn có thể sử dụng một trong các phương pháp sau:
+If you want to set up your own update server, you can use one of the following methods:
 
-#### 1. Sử dụng GitHub Releases
+#### 1. Using GitHub Releases
 
-Đây là cách đơn giản nhất để lưu trữ và quản lý các bản cập nhật:
+This is the simplest way to store and manage updates:
 
-1. Tạo một repository trên GitHub cho dự án TSToolkit
-2. Tạo releases cho mỗi phiên bản mới
-3. Tạo file JSON chứa thông tin cập nhật (có thể sử dụng GitHub Pages):
+1. Create a GitHub repository for the TSToolkit project
+2. Create releases for each new version
+3. Create a JSON file containing update information (can use GitHub Pages):
 
 ```json
 {
   "latestVersion": "1.1.0",
   "downloadUrl": "https://github.com/username/TSToolkit/releases/download/v1.1.0/TSToolkit-v1.1.0.zip",
-  "releaseNotes": "Bản cập nhật mới với các tính năng: ..."
+  "releaseNotes": "New update with features: ..."
 }
 ```
 
-4. Cập nhật biến `$updateServerUrl` trong `UpdateChecker.ps1` để trỏ đến URL của file JSON:
+4. Update the `$updateServerUrl` variable in `UpdateChecker.ps1` to point to the JSON file URL:
 ```powershell
 $updateServerUrl = "https://username.github.io/TSToolkit/updates.json"
 ```
 
-### 2. Sử dụng Web Server Tùy Chỉnh
+### 2. Using a Custom Web Server
 
-Nếu bạn muốn kiểm soát hoàn toàn quá trình cập nhật:
+If you want complete control over the update process:
 
-1. Thiết lập web server (Apache, Nginx, IIS, v.v.)
-2. Tạo API endpoint trả về thông tin cập nhật dạng JSON:
+1. Set up a web server (Apache, Nginx, IIS, etc.)
+2. Create an API endpoint that returns update information in JSON format:
 
 ```json
 {
   "latestVersion": "1.1.0",
   "downloadUrl": "https://your-server.com/downloads/TSToolkit-v1.1.0.zip",
-  "releaseNotes": "Bản cập nhật mới với các tính năng: ..."
+  "releaseNotes": "New update with features: ..."
 }
 ```
 
-3. Lưu trữ các file cập nhật trên server
-4. Cập nhật biến `$updateServerUrl` trong `UpdateChecker.ps1`:
+3. Host the update files on the server
+4. Update the `$updateServerUrl` variable in `UpdateChecker.ps1`:
 ```powershell
 $updateServerUrl = "https://your-server.com/api/updates"
 ```
 
-### 3. Sử dụng Dịch Vụ Lưu Trữ File
+### 3. Using File Hosting Services
 
-Bạn có thể sử dụng các dịch vụ như Dropbox, Google Drive, OneDrive:
+You can use services like Dropbox, Google Drive, OneDrive:
 
-1. Tải lên file JSON chứa thông tin cập nhật
-2. Tạo liên kết chia sẻ công khai cho file JSON
-3. Tải lên các file cập nhật và tạo liên kết chia sẻ
-4. Cập nhật biến `$updateServerUrl` trong `UpdateChecker.ps1`:
+1. Upload a JSON file containing update information
+2. Create a public sharing link for the JSON file
+3. Upload the update files and create sharing links
+4. Update the `$updateServerUrl` variable in `UpdateChecker.ps1`:
 ```powershell
 $updateServerUrl = "https://dl.dropboxusercontent.com/s/abc123/updates.json"
 ```
 
-### Cấu Trúc File JSON Cập Nhật
+### Update JSON File Structure
 
-File JSON cập nhật nên có cấu trúc sau:
+The update JSON file should have the following structure:
 
 ```json
 {
   "latestVersion": "1.1.0",
   "downloadUrl": "https://example.com/download/TSToolkit-v1.1.0.zip",
-  "releaseNotes": "Bản cập nhật mới với các tính năng: ...",
+  "releaseNotes": "New update with features: ...",
   "releaseDate": "2024-07-15",
   "minRequiredVersion": "1.0.0",
   "isRequired": false
 }
 ```
 
-Trong đó:
-- `latestVersion`: Phiên bản mới nhất (định dạng Semantic Versioning)
-- `downloadUrl`: URL để tải về bản cập nhật
-- `releaseNotes`: Ghi chú về các thay đổi trong bản cập nhật
-- `releaseDate`: Ngày phát hành bản cập nhật (tùy chọn)
-- `minRequiredVersion`: Phiên bản tối thiểu cần thiết (tùy chọn)
-- `isRequired`: Xác định xem cập nhật có bắt buộc hay không (tùy chọn)
+Where:
+- `latestVersion`: The latest version (Semantic Versioning format)
+- `downloadUrl`: URL to download the update
+- `releaseNotes`: Notes about changes in the update
+- `releaseDate`: Release date of the update (optional)
+- `minRequiredVersion`: Minimum required version (optional)
+- `isRequired`: Specifies whether the update is mandatory (optional)
 
-### Cập Nhật Script PowerShell
+### Updating the PowerShell Script
 
-Sau khi thiết lập server, bạn cần cập nhật script `UpdateChecker.ps1` để kết nối với server:
+After setting up the server, you need to update the `UpdateChecker.ps1` script to connect to the server:
 
-1. Mở file `UpdateChecker.ps1`
-2. Cập nhật biến `$updateServerUrl` với URL của server cập nhật
-3. Bỏ comment phần code gọi API:
+1. Open the `UpdateChecker.ps1` file
+2. Update the `$updateServerUrl` variable with the update server URL
+3. Uncomment the API call code:
 ```powershell
 $response = Invoke-WebRequest -Uri $updateServerUrl -UseBasicParsing
 $updateInfo = $response.Content | ConvertFrom-Json
 ```
-4. Tùy chỉnh logic xử lý cập nhật nếu cần
+4. Customize the update handling logic if needed
 
-## Cách cài đặt
+## Installation
 
-Có hai cách để cài đặt tính năng tự động kiểm tra cập nhật:
+There are two ways to install the automatic update check feature:
 
-### Cách 1: Sử dụng AutoRun Registry
+### Method 1: Using AutoRun Registry
 
-1. Mở Notepad và tạo file với nội dung sau:
+1. Open Notepad and create a file with the following content:
 ```
 Windows Registry Editor Version 5.00
 
@@ -152,65 +152,65 @@ Windows Registry Editor Version 5.00
 "AutoRun"="\"D:\\TSToolkit (Teo Sushi Windows Toolkit)\\UpdateServer\\CheckUpdate.cmd\""
 ```
 
-2. Lưu file với tên `enable_update_check.reg`
-3. Nhấp đúp vào file để thêm vào Registry
-4. Mỗi khi mở CMD, script kiểm tra cập nhật sẽ tự động chạy
+2. Save the file as `enable_update_check.reg`
+3. Double-click the file to add it to the Registry
+4. Every time CMD is opened, the update check script will automatically run
 
-### Cách 2: Sử dụng biến môi trường CMDAUTORUN
+### Method 2: Using the CMDAUTORUN Environment Variable
 
-1. Mở Control Panel > System and Security > System
-2. Nhấp vào "Advanced system settings"
-3. Nhấp vào "Environment Variables"
-4. Trong phần "User variables", nhấp vào "New"
-5. Nhập tên biến: `CMDAUTORUN`
-6. Nhập giá trị biến: `D:\TSToolkit (Teo Sushi Windows Toolkit)\UpdateServer\CheckUpdate.cmd`
-7. Nhấp OK để lưu
+1. Open Control Panel > System and Security > System
+2. Click on "Advanced system settings"
+3. Click on "Environment Variables"
+4. In the "User variables" section, click on "New"
+5. Enter variable name: `CMDAUTORUN`
+6. Enter variable value: `D:\TSToolkit (Teo Sushi Windows Toolkit)\UpdateServer\CheckUpdate.cmd`
+7. Click OK to save
 
-### Cách 3: Sử dụng Setup.cmd (Đơn giản nhất)
+### Method 3: Using Setup.cmd (Simplest)
 
-1. Chạy file `Setup.cmd` trong thư mục UpdateServer
-2. Chọn tùy chọn 1 để bật tính năng kiểm tra cập nhật
-3. Hệ thống sẽ tự động thiết lập Registry cho bạn
+1. Run the `Setup.cmd` file in the UpdateServer directory
+2. Select option 1 to enable the update check feature
+3. The system will automatically set up the Registry for you
 
-## Cấu trúc hệ thống
+## System Structure
 
-Hệ thống kiểm tra cập nhật bao gồm các thành phần sau:
+The update checking system includes the following components:
 
-1. **UpdateChecker.ps1**: Script PowerShell chính để kiểm tra và xử lý cập nhật
-   - Lưu trữ thông tin phiên bản hiện tại
-   - Kết nối với server để kiểm tra phiên bản mới
-   - So sánh phiên bản và hiển thị thông báo
-   - Xử lý quá trình tải về và cập nhật
-   - Sử dụng cấu hình encoding UTF-8 để hiển thị tiếng Việt đúng
+1. **UpdateChecker.ps1**: Main PowerShell script for checking and handling updates
+   - Stores current version information
+   - Connects to the server to check for new versions
+   - Compares versions and displays notifications
+   - Handles the download and update process
+   - Uses UTF-8 encoding configuration to display text correctly
 
-2. **CheckUpdate.cmd**: Script CMD đơn giản để gọi UpdateChecker.ps1
-   - Đảm bảo PowerShell được chạy với quyền thực thi phù hợp
-   - Sử dụng tham số `-ExecutionPolicy Bypass` để bỏ qua chính sách thực thi
-   - Sử dụng lệnh `chcp 65001` để hiển thị tiếng Việt đúng
-   - Thiết lập encoding UTF-8 cho PowerShell khi chạy script
+2. **CheckUpdate.cmd**: Simple CMD script to call UpdateChecker.ps1
+   - Ensures PowerShell is run with appropriate execution privileges
+   - Uses the `-ExecutionPolicy Bypass` parameter to bypass execution policy
+   - Uses the `chcp 65001` command to display text correctly
+   - Sets UTF-8 encoding for PowerShell when running the script
 
-3. **enable_update_check.reg** và **disable_update_check.reg**: File Registry để bật/tắt tính năng
-   - Thêm hoặc xóa giá trị AutoRun trong Registry
+3. **enable_update_check.reg** and **disable_update_check.reg**: Registry files to enable/disable the feature
+   - Add or remove the AutoRun value in the Registry
 
-4. **Setup.cmd**: Công cụ quản lý tính năng kiểm tra cập nhật
-   - Giao diện thân thiện để bật/tắt tính năng
-   - Cho phép kiểm tra cập nhật ngay lập tức
-   - Sử dụng lệnh `chcp 65001` để hiển thị tiếng Việt đúng
+4. **Setup.cmd**: Update check feature management tool
+   - User-friendly interface to enable/disable the feature
+   - Allows checking for updates immediately
+   - Uses the `chcp 65001` command to display text correctly
 
-## Tùy chỉnh
+## Customization
 
-Bạn có thể tùy chỉnh hệ thống kiểm tra cập nhật bằng cách:
+You can customize the update checking system by:
 
-1. **Thay đổi URL server**: Mở file `UpdateChecker.ps1` và cập nhật biến `$updateServerUrl`
-2. **Thay đổi phiên bản hiện tại**: Cập nhật biến `$currentVersion` trong `UpdateChecker.ps1`
-3. **Tùy chỉnh thông báo**: Chỉnh sửa các thông báo trong `UpdateChecker.ps1` theo nhu cầu
-4. **Thay đổi logic kiểm tra**: Bỏ comment phần code gọi API và tùy chỉnh logic kiểm tra cập nhật
+1. **Changing the server URL**: Open the `UpdateChecker.ps1` file and update the `$updateServerUrl` variable
+2. **Changing the current version**: Update the `$currentVersion` variable in `UpdateChecker.ps1`
+3. **Customizing messages**: Edit the messages in `UpdateChecker.ps1` as needed
+4. **Changing the check logic**: Uncomment the API call code and customize the update check logic
 
-## Cách gỡ bỏ
+## Uninstallation
 
-### Gỡ bỏ AutoRun Registry
+### Removing AutoRun Registry
 
-1. Mở Notepad và tạo file với nội dung sau:
+1. Open Notepad and create a file with the following content:
 ```
 Windows Registry Editor Version 5.00
 
@@ -218,28 +218,28 @@ Windows Registry Editor Version 5.00
 "AutoRun"=-
 ```
 
-2. Lưu file với tên `disable_update_check.reg`
-3. Nhấp đúp vào file để xóa khỏi Registry
+2. Save the file as `disable_update_check.reg`
+3. Double-click the file to remove it from the Registry
 
-### Gỡ bỏ biến môi trường CMDAUTORUN
+### Removing the CMDAUTORUN Environment Variable
 
-1. Mở Control Panel > System and Security > System
-2. Nhấp vào "Advanced system settings"
-3. Nhấp vào "Environment Variables"
-4. Trong phần "User variables", chọn `CMDAUTORUN`
-5. Nhấp vào "Delete"
-6. Nhấp OK để lưu
+1. Open Control Panel > System and Security > System
+2. Click on "Advanced system settings"
+3. Click on "Environment Variables"
+4. In the "User variables" section, select `CMDAUTORUN`
+5. Click on "Delete"
+6. Click OK to save
 
-### Sử dụng Setup.cmd (Đơn giản nhất)
+### Using Setup.cmd (Simplest)
 
-1. Chạy file `Setup.cmd` trong thư mục UpdateServer
-2. Chọn tùy chọn 2 để tắt tính năng kiểm tra cập nhật
+1. Run the `Setup.cmd` file in the UpdateServer directory
+2. Select option 2 to disable the update check feature
 
-## Lưu ý
+## Notes
 
-- Script kiểm tra cập nhật sẽ chạy mỗi khi mở CMD
-- Nếu bạn không muốn kiểm tra cập nhật trong một phiên CMD cụ thể, hãy sử dụng lệnh `cmd /D` để mở CMD mà không chạy AutoRun
-- Đảm bảo đường dẫn trong file Registry và biến môi trường trỏ đến vị trí chính xác của script `CheckUpdate.cmd`
-- Các script sử dụng lệnh `chcp 65001` và cấu hình encoding UTF-8 để đảm bảo hiển thị tiếng Việt đúng trong Command Prompt và PowerShell
-- Nếu bạn gặp vấn đề về hiển thị, hãy đảm bảo rằng CMD và PowerShell của bạn đang sử dụng font hỗ trợ Unicode (như Consolas hoặc Lucida Console)
-- Nếu tiếng Việt vẫn hiển thị không đúng trong PowerShell, hãy mở PowerShell và chạy lệnh sau trước khi chạy script: `[Console]::OutputEncoding = [System.Text.Encoding]::UTF8` 
+- The update check script will run every time CMD is opened
+- If you don't want to check for updates in a specific CMD session, use the `cmd /D` command to open CMD without running AutoRun
+- Make sure the path in the Registry file and environment variable points to the correct location of the `CheckUpdate.cmd` script
+- The scripts use the `chcp 65001` command and UTF-8 encoding configuration to ensure correct text display in Command Prompt and PowerShell
+- If you have display issues, make sure your CMD and PowerShell are using a Unicode-supporting font (like Consolas or Lucida Console)
+- If text still doesn't display correctly in PowerShell, open PowerShell and run the following command before running the script: `[Console]::OutputEncoding = [System.Text.Encoding]::UTF8` 

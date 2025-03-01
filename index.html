@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TSToolkit - Cập Nhật</title>
+    <title>TSToolkit - Updates</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -53,50 +53,50 @@
 </head>
 <body>
     <header>
-        <h1>TSToolkit - Cập Nhật</h1>
-        <p>Trang thông tin cập nhật chính thức cho TSToolkit</p>
+        <h1>TSToolkit - Updates</h1>
+        <p>Official update information page for TSToolkit</p>
     </header>
 
     <main>
         <div class="version-info">
-            <h2>Phiên bản mới nhất: <span id="latest-version">1.1.0</span></h2>
-            <p>Ngày phát hành: <span id="release-date">15/07/2024</span></p>
-            <p id="release-notes">Bản cập nhật mới với các tính năng: Cải thiện hiệu suất, sửa lỗi và thêm tính năng mới</p>
-            <a href="https://teosushi1014.github.io/tsupdate/dl/TSToolkit-v1.1.0.zip" class="download-btn" id="download-link">Tải về ngay</a>
+            <h2>Latest version: <span id="latest-version">1.1.0</span></h2>
+            <p>Release date: <span id="release-date">07/15/2024</span></p>
+            <p id="release-notes">New update with features: Performance improvements, bug fixes, and new features</p>
+            <a href="https://teosushi1014.github.io/tsupdate/dl/TSToolkit-v1.1.0.zip" class="download-btn" id="download-link">Download Now</a>
         </div>
 
-        <h3>Các thay đổi trong phiên bản này:</h3>
+        <h3>Changes in this version:</h3>
         <ul class="changelog" id="changelog">
-            <li>Cải thiện tốc độ khởi động</li>
-            <li>Sửa lỗi không thể xóa một số ứng dụng</li>
-            <li>Thêm tính năng tự động kiểm tra cập nhật</li>
-            <li>Cập nhật giao diện người dùng</li>
+            <li>Improved startup speed</li>
+            <li>Fixed issue with inability to delete certain applications</li>
+            <li>Added automatic update check feature</li>
+            <li>Updated user interface</li>
         </ul>
 
-        <h3>Hướng dẫn cài đặt:</h3>
+        <h3>Installation instructions:</h3>
         <ol>
-            <li>Tải về file ZIP từ liên kết phía trên</li>
-            <li>Giải nén file vào thư mục bạn muốn</li>
-            <li>Chạy file <code>Setup.cmd</code> để cài đặt</li>
-            <li>Làm theo hướng dẫn trên màn hình</li>
+            <li>Download the ZIP file from the link above</li>
+            <li>Extract the file to your desired folder</li>
+            <li>Run the <code>Setup.cmd</code> file to install</li>
+            <li>Follow the on-screen instructions</li>
         </ol>
     </main>
 
     <footer>
-        <p>&copy; 2024 TSToolkit (Teo Sushi Windows Toolkit). Tất cả quyền được bảo lưu.</p>
+        <p>&copy; 2024 TSToolkit (Teo Sushi Windows Toolkit). All rights reserved.</p>
     </footer>
 
     <script>
-        // Tự động cập nhật thông tin từ file updates.json
+        // Automatically update information from updates.json file
         fetch('updates.json')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('latest-version').textContent = data.latestVersion;
-                document.getElementById('release-date').textContent = new Date(data.releaseDate).toLocaleDateString('vi-VN');
+                document.getElementById('release-date').textContent = new Date(data.releaseDate).toLocaleDateString('en-US');
                 document.getElementById('release-notes').textContent = data.releaseNotes;
                 document.getElementById('download-link').href = data.downloadUrl;
                 
-                // Cập nhật changelog
+                // Update changelog
                 if (data.changeLog && data.changeLog.length > 0) {
                     const changelogList = document.getElementById('changelog');
                     changelogList.innerHTML = '';
@@ -107,7 +107,7 @@
                     });
                 }
             })
-            .catch(error => console.error('Không thể tải thông tin cập nhật:', error));
+            .catch(error => console.error('Unable to load update information:', error));
     </script>
 </body>
 </html> 

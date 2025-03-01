@@ -1,73 +1,73 @@
 # UpdateChecker.ps1
-# Script kiểm tra cập nhật cho TSToolkit
-# Tạo bởi: Claude AI
+# Update checker script for TSToolkit
+# Created by: Claude AI
 
-# Thiết lập encoding UTF-8 để hiển thị tiếng Việt đúng
+# Set UTF-8 encoding for correct text display
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 $PSDefaultParameterValues['*:Encoding'] = 'utf8'
 
 $currentVersion = "1.0.0"
-$updateServerUrl = "https://teosushi1014.github.io/tsupdate/updates.json" # URL server cập nhật chính thức
+$updateServerUrl = "https://teosushi1014.github.io/tsupdate/updates.json" # Official update server URL
 
 function Check-ForUpdates {
-    Write-Host "Đang kiểm tra cập nhật cho TSToolkit..." -ForegroundColor Cyan
+    Write-Host "Checking for TSToolkit updates..." -ForegroundColor Cyan
     
     try {
-        # Kết nối với server cập nhật
+        # Connect to update server
         $response = Invoke-WebRequest -Uri $updateServerUrl -UseBasicParsing
         $updateInfo = $response.Content | ConvertFrom-Json
         
-        # Giả lập dữ liệu cập nhật nếu không thể kết nối với server
+        # Simulate update data if unable to connect to server
         if ($null -eq $updateInfo) {
             $updateInfo = @{
                 "latestVersion" = "1.0.0"
                 "downloadUrl" = "https://teosushi1014.github.io/tsupdate/dl/TSToolkit-v1.0.0.zip"
-                "releaseNotes" = "Bản cập nhật mới nhất"
+                "releaseNotes" = "Latest update"
             }
         }
         
         if ([version]$updateInfo.latestVersion -gt [version]$currentVersion) {
-            Write-Host "Đã có bản cập nhật mới: v$($updateInfo.latestVersion)" -ForegroundColor Green
-            Write-Host "Ghi chú phát hành: $($updateInfo.releaseNotes)" -ForegroundColor Yellow
-            Write-Host "Tải về tại: $($updateInfo.downloadUrl)" -ForegroundColor Yellow
+            Write-Host "New update available: v$($updateInfo.latestVersion)" -ForegroundColor Green
+            Write-Host "Release notes: $($updateInfo.releaseNotes)" -ForegroundColor Yellow
+            Write-Host "Download at: $($updateInfo.downloadUrl)" -ForegroundColor Yellow
             
-            $choice = Read-Host "Bạn có muốn tải về bản cập nhật này không? (Y/N)"
+            $choice = Read-Host "Do you want to download this update? (Y/N)"
             if ($choice -eq "Y" -or $choice -eq "y") {
-                # Thực hiện tải về và cập nhật
-                Write-Host "Đang tải về bản cập nhật..." -ForegroundColor Cyan
+                # Perform download and update
+                Write-Host "Downloading update..." -ForegroundColor Cyan
                 
-                # Tạo thư mục tạm để tải về
+                # Create temp directory for download
                 $tempDir = [System.IO.Path]::GetTempPath() + [System.Guid]::NewGuid().ToString()
                 New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
                 
-                # Tên file tải về
+                # Download file name
                 $downloadFileName = [System.IO.Path]::GetFileName($updateInfo.downloadUrl)
                 $downloadFilePath = Join-Path -Path $tempDir -ChildPath $downloadFileName
                 
                 try {
-                    # Tải file cập nhật
+                    # Download update file
                     Invoke-WebRequest -Uri $updateInfo.downloadUrl -OutFile $downloadFilePath
                     
-                    # Mở thư mục chứa file tải về
-                    Write-Host "Đã tải về thành công tại: $downloadFilePath" -ForegroundColor Green
+                    # Open folder containing downloaded file
+                    Write-Host "Download successful at: $downloadFilePath" -ForegroundColor Green
                     Start-Process -FilePath "explorer.exe" -ArgumentList "/select,`"$downloadFilePath`""
                     
-                    # Hướng dẫn cài đặt
-                    Write-Host "Vui lòng giải nén file và chạy Setup.cmd để cài đặt cập nhật." -ForegroundColor Yellow
+                    # Installation instructions
+                    Write-Host "Please extract the file and run Setup.cmd to install the update." -ForegroundColor Yellow
                 } catch {
-                    Write-Host "Không thể tải về bản cập nhật: $_" -ForegroundColor Red
-                    Write-Host "Vui lòng tải về thủ công tại: $($updateInfo.downloadUrl)" -ForegroundColor Yellow
+                    Write-Host "Unable to download update: $_" -ForegroundColor Red
+                    Write-Host "Please download manually at: $($updateInfo.downloadUrl)" -ForegroundColor Yellow
                 }
             }
         } else {
-            Write-Host "TSToolkit đã ở phiên bản mới nhất (v$currentVersion)" -ForegroundColor Green
+            Write-Host "TSToolkit is already at the latest version (v$currentVersion)" -ForegroundColor Green
         }
     } catch {
-        Write-Host "Không thể kiểm tra cập nhật: $_" -ForegroundColor Red
-        Write-Host "Vui lòng kiểm tra kết nối mạng và thử lại sau." -ForegroundColor Yellow
+        Write-Host "Unable to check for updates: $_" -ForegroundColor Red
+        Write-Host "Please check your network connection and try again later." -ForegroundColor Yellow
     }
 }
 
-# Chạy hàm kiểm tra cập nhật
+# Run update check function
 Check-ForUpdates 

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSToolkit - Cập Nhật</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #0066cc;
+        }
+        .version-info {
+            background-color: #f5f5f5;
+            border-left: 4px solid #0066cc;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .download-btn {
+            display: inline-block;
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .download-btn:hover {
+            background-color: #004c99;
+        }
+        ul.changelog {
+            background-color: #f9f9f9;
+            padding: 15px 15px 15px 40px;
+            border-radius: 4px;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TSToolkit - Cập Nhật</h1>
+        <p>Trang thông tin cập nhật chính thức cho TSToolkit</p>
+    </header>
+
+    <main>
+        <div class="version-info">
+            <h2>Phiên bản mới nhất: <span id="latest-version">1.1.0</span></h2>
+            <p>Ngày phát hành: <span id="release-date">15/07/2024</span></p>
+            <p id="release-notes">Bản cập nhật mới với các tính năng: Cải thiện hiệu suất, sửa lỗi và thêm tính năng mới</p>
+            <a href="https://teosushi1014.github.io/tsupdate/dl/TSToolkit-v1.1.0.zip" class="download-btn" id="download-link">Tải về ngay</a>
+        </div>
+
+        <h3>Các thay đổi trong phiên bản này:</h3>
+        <ul class="changelog" id="changelog">
+            <li>Cải thiện tốc độ khởi động</li>
+            <li>Sửa lỗi không thể xóa một số ứng dụng</li>
+            <li>Thêm tính năng tự động kiểm tra cập nhật</li>
+            <li>Cập nhật giao diện người dùng</li>
+        </ul>
+
+        <h3>Hướng dẫn cài đặt:</h3>
+        <ol>
+            <li>Tải về file ZIP từ liên kết phía trên</li>
+            <li>Giải nén file vào thư mục bạn muốn</li>
+            <li>Chạy file <code>Setup.cmd</code> để cài đặt</li>
+            <li>Làm theo hướng dẫn trên màn hình</li>
+        </ol>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TSToolkit (Teo Sushi Windows Toolkit). Tất cả quyền được bảo lưu.</p>
+    </footer>
+
+    <script>
+        // Tự động cập nhật thông tin từ file updates.json
+        fetch('updates.json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('latest-version').textContent = data.latestVersion;
+                document.getElementById('release-date').textContent = new Date(data.releaseDate).toLocaleDateString('vi-VN');
+                document.getElementById('release-notes').textContent = data.releaseNotes;
+                document.getElementById('download-link').href = data.downloadUrl;
+                
+                // Cập nhật changelog
+                if (data.changeLog && data.changeLog.length > 0) {
+                    const changelogList = document.getElementById('changelog');
+                    changelogList.innerHTML = '';
+                    data.changeLog.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        changelogList.appendChild(li);
+                    });
+                }
+            })
+            .catch(error => console.error('Không thể tải thông tin cập nhật:', error));
+    </script>
+</body>
+</html> 

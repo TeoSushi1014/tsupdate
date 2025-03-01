@@ -7,7 +7,7 @@
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 $PSDefaultParameterValues['*:Encoding'] = 'utf8'
 
-$currentVersion = "1.0.0"
+$currentVersion = "1.1.0"
 $updateServerUrl = "https://teosushi1014.github.io/tsupdate/updates.json" # Official update server URL
 
 function Check-ForUpdates {
